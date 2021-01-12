@@ -1,7 +1,7 @@
 # TodoList-ApolloServer
 
 
-This repository provides **ApolloServer code** to test ApolloClient simply to test the toy project (todoList).
+This repository provides **ApolloServer code** to test ApolloClient implementing todolist.
 
 If you need it, please fork or clone and enjoy it! 😎
 
