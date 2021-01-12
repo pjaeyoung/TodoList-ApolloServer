@@ -1,0 +1,75 @@
+const { ApolloServer, gql } = require('apollo-server');
+
+const typeDefs = gql`
+  type Todo {
+    id: Int
+    content: String
+  }
+
+  type Query {
+    todos: [Todo]
+  }
+
+  type Mutation {
+    addTodo(content: String!): Todo
+    removeTodo(id: Int!): Int
+    updateTodo(id: Int!, content: String): Todo
+  }
+`;
+
+class TodosHandler {
+  constructor() {
+    this.todos = [];
+    this.size = 0;
+    this.lastId = 1;
+  }
+
+  getTodoIndex(id) {
+    return this.todos.findIndex((todo) => todo.id === id);
+  }
+
+  validateId(id) {
+    if (this.getTodoIndex(id) === -1) {
+      throw Error(`todo's id <${id}> is not founded`);
+    }
+  }
+
+  addTodo(content) {
+    const newTodo = { id: this.lastId++, content };
+    this.todos.push(newTodo);
+    return newTodo;
+  }
+
+  removeTodo(removeId) {
+    this.validateId(removeId);
+    this.todos = this.todos.filter(({ id }) => id !== removeId);
+    return removeId;
+  }
+
+  updateTodo({ id, content }) {
+    this.validateId(id);
+    const todo = this.todos[this.getTodoIndex(id)];
+    todo.content = content;
+    return todo;
+  }
+}
+
+const todosHandler = new TodosHandler();
+
+const resolvers = {
+  Query: {
+    todos: () => todosHandler.todos,
+  },
+  Mutation: {
+    addTodo: (_, { content }) => todosHandler.addTodo(content),
+    removeTodo: (_, { id }) => todosHandler.removeTodo(id),
+    updateTodo: (_, arg) => todosHandler.updateTodo(arg),
+  },
+};
+
+const server = new ApolloServer({ typeDefs, resolvers });
+
+// The `listen` method launches a web server.
+server.listen().then(({ url }) => {
+  console.log(`🚀  Server ready at ${url}`);
+});
