@@ -55,8 +55,8 @@ class TodosHandler {
 }
 
 const todosHandler = new TodosHandler([
-  { id: 1, content: 'nextjs 공부하기' },
-  { id: 2, content: '투두리스트로 CRUD 하기' },
+  { id: 1, content: 'study nextjs' },
+  { id: 2, content: 'todolist crud' },
 ]);
 
 const resolvers = {
