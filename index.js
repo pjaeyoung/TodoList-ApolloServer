@@ -18,10 +18,10 @@ const typeDefs = gql`
 `;
 
 class TodosHandler {
-  constructor() {
-    this.todos = [];
+  constructor(initialTodos = []) {
+    this.todos = initialTodos;
     this.size = 0;
-    this.lastId = 1;
+    this.lastId = initialTodos.length + 1;
   }
 
   getTodoIndex(id) {
@@ -54,7 +54,10 @@ class TodosHandler {
   }
 }
 
-const todosHandler = new TodosHandler();
+const todosHandler = new TodosHandler([
+  { id: 1, content: 'nextjs 공부하기' },
+  { id: 2, content: '투두리스트로 CRUD 하기' },
+]);
 
 const resolvers = {
   Query: {
